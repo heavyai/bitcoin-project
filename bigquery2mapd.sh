@@ -6,8 +6,7 @@
 #
 
 # Make sure the script is called with the bucket path as argument
-if [ "$#" -ne 1 ]
-then
+if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <Storage Cloud Bucket Path>" 
   echo "Example: $0 gs://vedabc" 
   exit 1
@@ -26,8 +25,7 @@ do
   echo $i
   rm -f chunk.json btc_chunk.csv btc_quandl.csv btc_chunk_merged.csv btc_chunk_final.csv.gz
   gsutil cp $i chunk.json.gz
-  if ! [ -e chunk.json.gz ]
-  then
+  if ! [ -e chunk.json.gz ];then
     echo "Error: could not find object $i" >&2
     exit 1
   fi

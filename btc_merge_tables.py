@@ -32,6 +32,8 @@ def btc_json2csv():
   filepath = 'chunk.json'  
   tran_data = open('btc_chunk.csv', 'w')
   csvwriter = csv.writer(tran_data)
+  header = ["transaction_datetime","transaction_date","transaction_id","block_id","prev_block_id","input_sequence","input_pubkey","output_pubkey","output_satoshis","output_btc"]
+  csvwriter.writerow(header)
   with open(filepath) as fp:  
     line = fp.readline()
     cnt = 1
@@ -56,10 +58,6 @@ def btc_json2csv():
       cnt += 1
   fp.close()
   tran_data.close()
-  os.system("cp ./header1 ./foo")
-  os.system("cat ./btc_chunk.csv >> ./foo")
-  os.system("mv ./foo ./btc_chunk.csv")
-
 
 # Merge all the Quandl Bitcoin Metric files and finally with 
 # the Bitcoin transactions file.
