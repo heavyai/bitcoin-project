@@ -101,7 +101,7 @@ merge_tables()
 df1 = pd.read_csv('./data/popular_btc_addresses.csv')
 populars = df1.popular_addresses.tolist()
 
-def func1(x):
+def set_popular(x):
   try:
     n = populars.index(x)
     x = 'popular'
@@ -110,8 +110,8 @@ def func1(x):
   return x
 
 df2 = pd.read_csv("btc_chunk_merged.csv")
-df2['input_pubkey_type'] = df2.loc[:,'input_pubkey_type'].apply(func1)
-df2['output_pubkey_type'] = df2.loc[:,'output_pubkey_type'].apply(func1)
+df2['input_pubkey_type'] = df2.loc[:,'input_pubkey_type'].apply(set_popular)
+df2['output_pubkey_type'] = df2.loc[:,'output_pubkey_type'].apply(set_popular)
 df2['output_btc'] = df2['output_btc'].multiply(df2['btc_price_usd'], axis="index")
 df2.to_csv("btc_chunk_final.csv", index=False)  
 
