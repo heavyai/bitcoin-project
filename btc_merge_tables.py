@@ -36,26 +36,22 @@ def btc_json2csv():
   csvwriter.writerow(header)
   with open(filepath) as fp:  
     line = fp.readline()
-    cnt = 1
     while line:
       data = json.loads(line)
-      if len(data['inputs']) > 1:
-        cnt += 1
-        line = fp.readline()
-        continue
-      inputs = data['inputs'][0]
-      if 'input_pubkey_base58' in inputs:
-        for outputs in data['outputs']:  
-          if 'output_pubkey_base58' in outputs:
-            btc = float(outputs['output_satoshis'])/100000000.0
-            writeline = '%s %s %s %s %s %s %s %s %s %f' % (
-            data['timestamp'], data['timestamp'], data['transaction_id'], data['block_id'], data['previous_block'], inputs['input_sequence_number'] ,inputs['input_pubkey_base58'], outputs['output_pubkey_base58'], outputs['output_satoshis'], btc)
-            list = writeline.split()
-            list[0] = '%s' % (datetime.datetime.fromtimestamp(int(data['timestamp'])/1000).strftime('%m/%d/%Y %H:%M:%S'))
-            list[1] = '%s' % (datetime.datetime.fromtimestamp(int(data['timestamp'])/1000).strftime('%m/%d/%Y'))
-            csvwriter.writerow(list)
+      num_inputs = len(data['inputs'])
+      for inputs in data['inputs']:
+        if 'input_pubkey_base58' in inputs:
+          for outputs in data['outputs']:  
+            if 'output_pubkey_base58' in outputs:
+              btc = float(outputs['output_satoshis'])/100000000.0
+              btc = btc / float(num_inputs)
+              writeline = '%s %s %s %s %s %s %s %s %s %f' % (
+              data['timestamp'], data['timestamp'], data['transaction_id'], data['block_id'], data['previous_block'], inputs['input_sequence_number'] ,inputs['input_pubkey_base58'], outputs['output_pubkey_base58'], outputs['output_satoshis'], btc)
+              list = writeline.split()
+              list[0] = '%s' % (datetime.datetime.fromtimestamp(int(data['timestamp'])/1000).strftime('%m/%d/%Y %H:%M:%S'))
+              list[1] = '%s' % (datetime.datetime.fromtimestamp(int(data['timestamp'])/1000).strftime('%m/%d/%Y'))
+              csvwriter.writerow(list)
       line = fp.readline()
-      cnt += 1
   fp.close()
   tran_data.close()
 
